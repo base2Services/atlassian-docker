@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 8095, host: 8095
 
   config.vm.provider :virtualbox do |vb|
-   vb.customize ["modifyvm", :id, "--memory", 2048]
+   vb.customize ["modifyvm", :id, "--memory", 3072]
   end
 
   #config.vm.provision :shell, :inline => "curl -Lks git.io/cfg | HOME=/home/vagrant bash", :privileged => false
