@@ -14,19 +14,18 @@ run apt-get update
 run echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 run DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
-# Install Jira
+# Install Crowd
 
 run apt-get install -q -y curl
-run curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.1.tar.gz -o /root/jira.tar.gz
-run /usr/sbin/useradd --create-home --home-dir /usr/local/jira --shell /bin/bash jira
-run mkdir -p /opt/jira
-run tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
-run mkdir -p /opt/jira-home
-run echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
+run curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.0.tar.gz -o /root/crowd.tar.gz
+run /usr/sbin/useradd --create-home --home-dir /usr/local/crowd --shell /bin/bash crowd
+run mkdir -p /opt/crowd
+run tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
+run mkdir -p /opt/crowd-home
+run echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
 
-# Launching Jira
+# Launching Crowd
 
-workdir /opt/jira-home
-run rm -f /opt/jira-home/.jira-home.lock
-expose 8080:8080
-cmd ["/opt/jira/bin/start-jira.sh", "-fg"]
+workdir /opt/crowd
+expose 8095:8095
+cmd ["/opt/crowd/apache-tomcat/bin/catalina.sh run"]
