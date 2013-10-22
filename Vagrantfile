@@ -5,6 +5,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :forwarded_port, guest: 7990, host: 7990
   config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network :forwarded_port, guest: 8095, host: 8095
 
   config.vm.provider :virtualbox do |vb|
    vb.customize ["modifyvm", :id, "--memory", 2048]
