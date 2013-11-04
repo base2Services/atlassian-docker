@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "saucy"
+  config.vm.box = "quantal"
   config.ssh.username = "vagrant"
   #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/quantal/current/quantal-server-cloudimg-amd64-vagrant-disk1.box"
