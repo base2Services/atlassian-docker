@@ -1,8 +1,12 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "quantal"
+  config.vm.box = "raring"
   config.ssh.username = "vagrant"
+  # Ubuntu Quantal
+  #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/quantal/current/quantal-server-cloudimg-amd64-vagrant-disk1.box"
+  # Ubuntu Raring
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+  # Ubuntu Saucy
   #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/quantal/current/quantal-server-cloudimg-amd64-vagrant-disk1.box"
 
   config.vm.network :forwarded_port, guest: 7990, host: 7990
   config.vm.network :forwarded_port, guest: 8080, host: 8080
