@@ -26,5 +26,5 @@ run mkdir -p /opt/stash-home
 
 workdir /opt/stash-home
 env STASH_HOME /opt/stash-home
-expose 7990:7990
+expose 7990
 cmd ["/opt/stash/bin/start-stash.sh", "-fg"]

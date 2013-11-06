@@ -28,5 +28,5 @@ run echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes
 
 workdir /opt/jira-home
 run rm -f /opt/jira-home/.jira-home.lock
-expose 8080:8080
+expose 8080
 cmd ["/opt/jira/bin/start-jira.sh", "-fg"]

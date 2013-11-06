@@ -27,5 +27,5 @@ run echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classe
 # Launching Crowd
 
 workdir /opt/crowd
-expose 8095:8095
+expose 8095
 cmd /opt/crowd/apache-tomcat/bin/catalina.sh run
