@@ -16,8 +16,6 @@ Vagrant.configure("2") do |config|
    vb.customize ["modifyvm", :id, "--memory", 3072]
   end
 
-  config.vm.provision :shell, :inline => "curl -Lks git.io/cfg | HOME=/home/vagrant bash", :privileged => false
-
 $dockerinstall = <<SCRIPT
 echo Installing Docker...
 sudo apt-get update
@@ -30,5 +28,7 @@ echo Docker installed...
 SCRIPT
 
   config.vm.provision :shell, :inline => $dockerinstall, :privileged => false
+  config.vm.provision :shell, :inline => "curl -Lks git.io/cfg | HOME=/home/vagrant bash", :privileged => false
+
 end
 
