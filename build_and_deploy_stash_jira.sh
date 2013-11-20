@@ -6,9 +6,9 @@ cd /vagrant
 ./initialise_db.sh
 
 cd /vagrant/stash
-sudo docker build -t durdn/stash-2.8.2 .
+sudo docker build -t durdn/stash-2.9.1 .
 
-sudo docker run -d -name stash -link postgres:db -p 7990:7990 durdn/stash-2.8.2
+sudo docker run -d -name stash -link postgres:db -p 7990:7990 durdn/stash-2.9.1
 
 cd /vagrant/jira
 sudo docker build -t durdn/jira-6.1.1 .
