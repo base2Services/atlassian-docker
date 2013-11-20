@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
   # Ubuntu Quantal
   #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/quantal/current/quantal-server-cloudimg-amd64-vagrant-disk1.box"
   # Ubuntu Raring
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.box_url = "https://dl.dropboxusercontent.com/u/547671/thinkstack-raring64.box"
   # Ubuntu Saucy
   #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
@@ -14,6 +14,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |vb|
    vb.customize ["modifyvm", :id, "--memory", 3072]
+   vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+   vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
 
 $dockerinstall = <<SCRIPT
