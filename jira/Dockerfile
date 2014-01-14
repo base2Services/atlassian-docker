@@ -17,7 +17,7 @@ run DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 # Install Jira
 
 run apt-get install -q -y curl
-run curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.1.tar.gz -o /root/jira.tar.gz
+run curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.5.tar.gz -o /root/jira.tar.gz
 run /usr/sbin/useradd --create-home --home-dir /usr/local/jira --shell /bin/bash jira
 run mkdir -p /opt/jira
 run tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
