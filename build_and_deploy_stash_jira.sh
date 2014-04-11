@@ -1,5 +1,5 @@
 sudo docker pull zaiste/postgresql
-sudo docker run -d -name postgres -p=5432:5432 zaiste/postgresql
+sudo docker run -d --name postgres -p=5432:5432 zaiste/postgresql
 sudo apt-get install -q -y postgresql-client
 
 cd /vagrant
@@ -8,12 +8,12 @@ cd /vagrant
 cd /vagrant/stash
 sudo docker build -t durdn/stash-2.9.1 .
 
-sudo docker run -d -name stash -link postgres:db -p 7990:7990 durdn/stash-2.9.1
+sudo docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.9.1
 
 cd /vagrant/jira
 sudo docker build -t durdn/jira-6.1.1 .
 
-sudo docker run -d -name jira -link postgres:db -link stash:stash -p 8080:8080 durdn/jira-6.1.1
+sudo docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira-6.1.1
 
 echo "Containers running..."
 sudo docker ps
