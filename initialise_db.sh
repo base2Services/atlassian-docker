@@ -34,7 +34,9 @@
 # Creates Stash and JIRA databases and users
 
 # Get IP Address of postgres container
-PSQL_IP=$(sudo docker inspect postgres | grep IPAddress| cut -d '"' -f4)
+#PSQL_IP=$(sudo docker inspect postgres | grep IPAddress| cut -d '"' -f4)
+PSQL_IP=$DB_PORT_5432_TCP_ADDR
+PSQL_PORT=$DB_PORT_5432_TCP_PORT
 
 # Saves password
 echo "$PSQL_IP:*:*:docker:docker" > $HOME/.pgpass
@@ -45,5 +47,5 @@ CREATE ROLE stashuser WITH LOGIN PASSWORD 'jellyfish' VALID UNTIL 'infinity';
 CREATE DATABASE stash WITH ENCODING='UTF8' OWNER=stashuser TEMPLATE=template0 CONNECTION LIMIT=-1;
 CREATE ROLE jiradbuser WITH LOGIN PASSWORD 'jellyfish' VALID UNTIL 'infinity';
 CREATE DATABASE jiradb WITH ENCODING 'UNICODE' TEMPLATE=template0;" \
-| PGPASSWORD="docker" psql -h $PSQL_IP -d docker -U docker -w
+| PGPASSWORD="docker" psql -h $PSQL_IP -p $PSQL_PORT -d docker -U docker -w
 

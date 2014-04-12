@@ -1,9 +1,8 @@
 sudo docker pull zaiste/postgresql
 sudo docker run -d --name postgres -p=5432:5432 zaiste/postgresql
-sudo apt-get install -q -y postgresql-client
 
 cd /vagrant
-./initialise_db.sh
+cat initialise_db.sh | sudo docker run --rm -i --link postgres:db zaiste/postgresql bash -
 
 cd /vagrant/stash
 sudo docker build -t durdn/stash-2.9.1 .
