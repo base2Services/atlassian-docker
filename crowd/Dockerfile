@@ -1,6 +1,6 @@
 # Basics
 #
-from base:latest
+from ubuntu:12.04
 maintainer Nicola Paolucci <npaolucci@atlassian.com>
 run apt-get update
 run apt-get install -q -y git-core
