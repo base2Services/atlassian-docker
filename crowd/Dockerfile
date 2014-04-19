@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 # Install Crowd
 
 RUN apt-get install -q -y curl
-RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.0.tar.gz -o /root/crowd.tar.gz
+RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.1.tar.gz -o /root/crowd.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /usr/local/crowd --shell /bin/bash crowd
 RUN mkdir -p /opt/crowd
 RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
