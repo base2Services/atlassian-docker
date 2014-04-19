@@ -23,9 +23,24 @@ RUN mkdir -p /opt/crowd
 RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
 RUN mkdir -p /opt/crowd-home
 RUN echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
+RUN mv /opt/crowd/apache-tomcat/webapps/ROOT /opt/crowd/splash-webapp
+RUN mv /opt/crowd/apache-tomcat/conf/Catalina/localhost /opt/crowd/webapps
+RUN mkdir /opt/crowd/apache-tomcat/conf/Catalina/localhost
+
+ENV CROWD_URL http://localhost:8095/crowd
+ENV LOGIN_BASE_URL http://localhost:8095
+
+ENV CROWD_CONTEXT crowd
+ENV CROWDID_CONTEXT openidserver
+ENV OPENID_CLIENT_CONTEXT openidclient
+ENV DEMO_CONTEXT demo
+ENV SPLASH_CONTEXT ROOT
+
+ADD splash-context.xml /opt/crowd/webapps/splash.xml
+ADD launch.bash /launch
 
 # Launching Crowd
 
 WORKDIR /opt/crowd
 EXPOSE 8095
-CMD /opt/crowd/apache-tomcat/bin/catalina.sh run
+CMD ["/launch"]
