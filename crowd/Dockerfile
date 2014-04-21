@@ -16,7 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Crowd
 
-RUN apt-get install -q -y curl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y curl sudo
 RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.1.tar.gz -o /root/crowd.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /opt/crowd --shell /bin/bash crowd
 RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
@@ -40,8 +40,12 @@ ADD splash-context.xml /opt/crowd/webapps/splash.xml
 RUN chown -R crowd:crowd /opt/crowd
 ADD launch.bash /launch
 
+ADD own-volume.sh /usr/local/bin/own-volume
+RUN echo "crowd ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
+
 # Launching Crowd
 
+VOLUME /opt/crowd-home
 WORKDIR /opt/crowd
 EXPOSE 8095
 USER crowd

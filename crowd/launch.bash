@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
 
-
+sudo own-volume
 cd apache-tomcat/conf/Catalina/localhost
 for k in $(ls) ; do
   unlink $k
