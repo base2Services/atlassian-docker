@@ -18,10 +18,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 RUN apt-get install -q -y curl
 RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.1.tar.gz -o /root/crowd.tar.gz
-RUN /usr/sbin/useradd --create-home --home-dir /usr/local/crowd --shell /bin/bash crowd
-RUN mkdir -p /opt/crowd
+RUN /usr/sbin/useradd --create-home --home-dir /opt/crowd --shell /bin/bash crowd
 RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
 RUN mkdir -p /opt/crowd-home
+RUN chown -R crowd:crowd /opt/crowd-home
 RUN echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
 RUN mv /opt/crowd/apache-tomcat/webapps/ROOT /opt/crowd/splash-webapp
 RUN mv /opt/crowd/apache-tomcat/conf/Catalina/localhost /opt/crowd/webapps
@@ -37,10 +37,12 @@ ENV DEMO_CONTEXT demo
 ENV SPLASH_CONTEXT ROOT
 
 ADD splash-context.xml /opt/crowd/webapps/splash.xml
+RUN chown -R crowd:crowd /opt/crowd
 ADD launch.bash /launch
 
 # Launching Crowd
 
 WORKDIR /opt/crowd
 EXPOSE 8095
+USER crowd
 CMD ["/launch"]
