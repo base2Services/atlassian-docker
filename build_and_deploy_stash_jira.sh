@@ -1,23 +1,26 @@
-sudo docker pull zaiste/postgresql
-sudo docker run -d --name postgres -p=5432:5432 zaiste/postgresql
-sudo apt-get install -q -y postgresql-client
+if [ "$(docker run busybox echo 'test')" != "test" ]; then
+  SUDO=sudo
+  if [ "$($SUDO docker run busybox echo 'test')" != "test" ]; then
+    echo "Could not run docker"
+    exit 1
+  fi
+fi
+$SUDO docker pull zaiste/postgresql
+$SUDO docker run -d --name postgres -p=5432:5432 zaiste/postgresql
 
-cd /vagrant
-./initialise_db.sh
+cd "$(dirname $0)"
+cat initialise_db.sh | $SUDO docker run --rm -i --link postgres:db zaiste/postgresql bash -
 
-cd /vagrant/stash
-sudo docker build -t durdn/stash-2.9.1 .
+$SUDO docker build -t durdn/stash-2.9.1 stash
 
-sudo docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.9.1
+$SUDO docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.9.1
 
-cd /vagrant/jira
-sudo docker build -t durdn/jira-6.1.1 .
+$SUDO docker build -t durdn/jira-6.1.1 jira
 
-sudo docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira-6.1.1
+$SUDO docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira-6.1.1
 
 echo "Containers running..."
-sudo docker ps
+$SUDO docker ps
 
 echo "IP Addresses of containers:"
-paste <(sudo docker ps | tail -n +2 | awk {'printf "%s\t%s\n", $1, $2 '}) <(sudo docker ps  -q | xargs sudo docker inspect | tail -n +2 | grep IPAddress | awk '{ print $2 }' | tr -d ',"')
-
+$SUDO docker inspect -f '{{ .Config.Hostname }} {{ .Config.Image }} {{ .NetworkSettings.IPAddress }}' postgres stash jira
