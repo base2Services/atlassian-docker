@@ -2,6 +2,7 @@
 set -o errexit
 
 sudo own-volume
+rm -f /opt/jira-home/.jira-home.lock
 
 if [ "$CONTEXT_PATH" == "ROOT" -o -z "$CONTEXT_PATH" ]; then
   CONTEXT_PATH=

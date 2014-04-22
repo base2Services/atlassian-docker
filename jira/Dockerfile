@@ -37,7 +37,6 @@ RUN echo "jira ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
 
 WORKDIR /opt/jira
 VOLUME ["/opt/jira-home"]
-RUN rm -f /opt/jira-home/.jira-home.lock
 EXPOSE 8080
 USER jira
 CMD ["/launch"]
