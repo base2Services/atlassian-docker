@@ -1,32 +1,32 @@
 # Basics
 #
-from base:latest
-maintainer Nicola Paolucci <npaolucci@atlassian.com>
-run apt-get update
-run apt-get install -q -y git-core
+FROM ubuntu:12.04
+MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
+RUN apt-get update
+RUN apt-get install -q -y git-core
 
 # Install Java 7
 
-run DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common
-run DEBIAN_FRONTEND=noninteractive apt-get install -q -y python-software-properties
-run DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
-run apt-get update
-run echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-run DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y python-software-properties
+RUN DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
+RUN apt-get update
+RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Jira
 
-run apt-get install -q -y curl
-run curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.5.tar.gz -o /root/jira.tar.gz
-run /usr/sbin/useradd --create-home --home-dir /usr/local/jira --shell /bin/bash jira
-run mkdir -p /opt/jira
-run tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
-run mkdir -p /opt/jira-home
-run echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
+RUN apt-get install -q -y curl
+RUN curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.5.tar.gz -o /root/jira.tar.gz
+RUN /usr/sbin/useradd --create-home --home-dir /usr/local/jira --shell /bin/bash jira
+RUN mkdir -p /opt/jira
+RUN tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
+RUN mkdir -p /opt/jira-home
+RUN echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
 
 # Launching Jira
 
-workdir /opt/jira-home
-run rm -f /opt/jira-home/.jira-home.lock
-expose 8080
-cmd ["/opt/jira/bin/start-jira.sh", "-fg"]
+WORKDIR /opt/jira-home
+RUN rm -f /opt/jira-home/.jira-home.lock
+EXPOSE 8080
+CMD ["/opt/jira/bin/start-jira.sh", "-fg"]

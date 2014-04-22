@@ -1,31 +1,52 @@
 # Basics
 #
-from base:latest
-maintainer Nicola Paolucci <npaolucci@atlassian.com>
-run apt-get update
-run apt-get install -q -y git-core
+FROM ubuntu:12.04
+MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
+RUN apt-get update
+RUN apt-get install -q -y git-core
 
 # Install Java 7
 
-run DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common
-run DEBIAN_FRONTEND=noninteractive apt-get install -q -y python-software-properties
-run DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
-run apt-get update
-run echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-run DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y python-software-properties
+RUN DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
+RUN apt-get update
+RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Crowd
 
-run apt-get install -q -y curl
-run curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.0.tar.gz -o /root/crowd.tar.gz
-run /usr/sbin/useradd --create-home --home-dir /usr/local/crowd --shell /bin/bash crowd
-run mkdir -p /opt/crowd
-run tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
-run mkdir -p /opt/crowd-home
-run echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y curl sudo
+RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.1.tar.gz -o /root/crowd.tar.gz
+RUN /usr/sbin/useradd --create-home --home-dir /opt/crowd --shell /bin/bash crowd
+RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
+RUN mkdir -p /opt/crowd-home
+RUN chown -R crowd:crowd /opt/crowd-home
+RUN echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
+RUN mv /opt/crowd/apache-tomcat/webapps/ROOT /opt/crowd/splash-webapp
+RUN mv /opt/crowd/apache-tomcat/conf/Catalina/localhost /opt/crowd/webapps
+RUN mkdir /opt/crowd/apache-tomcat/conf/Catalina/localhost
+
+ENV CROWD_URL http://localhost:8095/crowd
+ENV LOGIN_BASE_URL http://localhost:8095
+
+ENV CROWD_CONTEXT crowd
+ENV CROWDID_CONTEXT openidserver
+ENV OPENID_CLIENT_CONTEXT openidclient
+ENV DEMO_CONTEXT demo
+ENV SPLASH_CONTEXT ROOT
+
+ADD splash-context.xml /opt/crowd/webapps/splash.xml
+RUN chown -R crowd:crowd /opt/crowd
+ADD launch.bash /launch
+
+ADD own-volume.sh /usr/local/bin/own-volume
+RUN echo "crowd ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
 
 # Launching Crowd
 
-workdir /opt/crowd
-expose 8095
-cmd /opt/crowd/apache-tomcat/bin/catalina.sh run
+VOLUME /opt/crowd-home
+WORKDIR /opt/crowd
+EXPOSE 8095
+USER crowd
+CMD ["/launch"]
