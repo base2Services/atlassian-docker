@@ -1,6 +1,8 @@
 #!/bin/bash
 set -o errexit
 
+sudo own-volume
+
 urldecode() {
     local data=${1//+/ }
     printf '%b' "${data//%/\x}"
