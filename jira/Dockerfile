@@ -24,9 +24,11 @@ RUN tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
 RUN mkdir -p /opt/jira-home
 RUN echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
 
+ADD launch.bash /launch
+
 # Launching Jira
 
 WORKDIR /opt/jira-home
 RUN rm -f /opt/jira-home/.jira-home.lock
 EXPOSE 8080
-CMD ["/opt/jira/bin/start-jira.sh", "-fg"]
+CMD ["/launch"]
