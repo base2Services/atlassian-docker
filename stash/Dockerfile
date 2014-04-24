@@ -18,15 +18,17 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 RUN apt-get install -q -y curl
 RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-2.12.1.tar.gz -o /root/stash.tar.gz
-RUN mkdir -p /opt/stash
+RUN /usr/sbin/useradd --create-home --home-dir /opt/stash --shell /bin/bash stash
 RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
 RUN mkdir -p /opt/stash-home
 RUN sed -i -e "s/^#!\/bin\/sh/#!\/bin\/bash/" /opt/stash/bin/catalina.sh
+RUN chown -R stash:stash /opt/stash
 
 ADD launch.bash /launch
 
 # Launching Stash
 
-WORKDIR /opt/stash-home
+WORKDIR /opt/stash
 EXPOSE 7990
-CMD ["/opt/stash/bin/start-stash.sh", "-fg"]
+USER stash
+CMD ["/launch"]
