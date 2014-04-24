@@ -2,7 +2,7 @@
 set -o errexit
 
 sudo own-volume
-rm -f /opt/jira-home/.jira-home.lock
+rm -f /opt/atlassian-home/.jira-home.lock
 
 if [ "$CONTEXT_PATH" == "ROOT" -o -z "$CONTEXT_PATH" ]; then
   CONTEXT_PATH=
@@ -93,7 +93,7 @@ if [ -n "$DATABASE_URL" ]; then
       exit 1
       ;;
   esac
-  cat <<END > /opt/jira-home/dbconfig.xml
+  cat <<END > /opt/atlassian-home/dbconfig.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <jira-database-config>
   <name>defaultDS</name>

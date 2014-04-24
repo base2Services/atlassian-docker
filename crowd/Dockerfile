@@ -6,11 +6,9 @@ MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 # Install Crowd
 
 RUN curl -Lks http://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-2.7.1.tar.gz -o /root/crowd.tar.gz
-RUN /usr/sbin/useradd --create-home --home-dir /opt/crowd --shell /bin/bash crowd
+RUN /usr/sbin/useradd --create-home --home-dir /opt/crowd --groups atlassian --shell /bin/bash crowd
 RUN tar zxf /root/crowd.tar.gz --strip=1 -C /opt/crowd
-RUN mkdir -p /opt/crowd-home
-RUN chown -R crowd:crowd /opt/crowd-home
-RUN echo "crowd.home = /opt/crowd-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
+RUN echo "crowd.home = /opt/atlassian-home" > /opt/crowd/crowd-webapp/WEB-INF/classes/crowd-init.properties
 RUN mv /opt/crowd/apache-tomcat/webapps/ROOT /opt/crowd/splash-webapp
 RUN mv /opt/crowd/apache-tomcat/conf/Catalina/localhost /opt/crowd/webapps
 RUN mkdir /opt/crowd/apache-tomcat/conf/Catalina/localhost
@@ -28,12 +26,9 @@ ADD splash-context.xml /opt/crowd/webapps/splash.xml
 RUN chown -R crowd:crowd /opt/crowd
 ADD launch.bash /launch
 
-ADD own-volume.sh /usr/local/bin/own-volume
-RUN echo "crowd ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
-
 # Launching Crowd
 
-VOLUME /opt/crowd-home
+VOLUME /opt/atlassian-home
 WORKDIR /opt/crowd
 EXPOSE 8095
 USER crowd
