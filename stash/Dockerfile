@@ -23,9 +23,10 @@ RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
 RUN mkdir -p /opt/stash-home
 RUN sed -i -e "s/^#!\/bin\/sh/#!\/bin\/bash/" /opt/stash/bin/catalina.sh
 
+ADD launch.bash /launch
+
 # Launching Stash
 
 WORKDIR /opt/stash-home
-ENV STASH_HOME /opt/stash-home
 EXPOSE 7990
 CMD ["/opt/stash/bin/start-stash.sh", "-fg"]
