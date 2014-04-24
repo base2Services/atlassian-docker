@@ -11,9 +11,9 @@ $SUDO docker run -d --name postgres -p=5432:5432 zaiste/postgresql
 cd "$(dirname $0)"
 cat initialise_db.sh | $SUDO docker run --rm -i --link postgres:db zaiste/postgresql bash -
 
-$SUDO docker build -t durdn/stash-2.9.1 stash
+$SUDO docker build -t durdn/stash-2.12.1 stash
 
-$SUDO docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.9.1
+$SUDO docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.12.1
 
 $SUDO docker build -t durdn/jira jira
 $SUDO docker tag durdn/jira durdn/jira:6.2.3

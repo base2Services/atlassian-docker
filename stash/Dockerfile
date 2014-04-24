@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 # Install Stash
 
 RUN apt-get install -q -y curl
-RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-2.9.1.tar.gz -o /root/stash.tar.gz
+RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-2.12.1.tar.gz -o /root/stash.tar.gz
 RUN mkdir -p /opt/stash
 RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
 RUN mkdir -p /opt/stash-home
