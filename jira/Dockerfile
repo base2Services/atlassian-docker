@@ -16,17 +16,27 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Jira
 
-RUN apt-get install -q -y curl
-RUN curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.1.5.tar.gz -o /root/jira.tar.gz
-RUN /usr/sbin/useradd --create-home --home-dir /usr/local/jira --shell /bin/bash jira
-RUN mkdir -p /opt/jira
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y curl sudo
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y xmlstarlet
+RUN curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.2.3.tar.gz -o /root/jira.tar.gz
+RUN /usr/sbin/useradd --create-home --home-dir /opt/jira --shell /bin/bash jira
 RUN tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira
 RUN mkdir -p /opt/jira-home
+RUN chown -R jira:jira /opt/jira-home
 RUN echo "jira.home = /opt/jira-home" > /opt/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
+RUN chown -R jira:jira /opt/jira
+RUN mv /opt/jira/conf/server.xml /opt/jira/conf/server-backup.xml
+
+ENV CONTEXT_PATH ROOT
+ADD launch.bash /launch
+
+ADD own-volume.sh /usr/local/bin/own-volume
+RUN echo "jira ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
 
 # Launching Jira
 
-WORKDIR /opt/jira-home
-RUN rm -f /opt/jira-home/.jira-home.lock
+WORKDIR /opt/jira
+VOLUME ["/opt/jira-home"]
 EXPOSE 8080
-CMD ["/opt/jira/bin/start-jira.sh", "-fg"]
+USER jira
+CMD ["/launch"]

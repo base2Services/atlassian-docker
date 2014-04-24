@@ -15,9 +15,10 @@ $SUDO docker build -t durdn/stash-2.9.1 stash
 
 $SUDO docker run -d --name stash --link postgres:db -p 7990:7990 durdn/stash-2.9.1
 
-$SUDO docker build -t durdn/jira-6.1.1 jira
+$SUDO docker build -t durdn/jira jira
+$SUDO docker tag durdn/jira durdn/jira:6.2.3
 
-$SUDO docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira-6.1.1
+$SUDO docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira
 
 echo "Containers running..."
 $SUDO docker ps
