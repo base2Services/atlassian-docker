@@ -1,6 +1,8 @@
 #!/bin/bash
 set -o errexit
 
+sudo own-volume
+
 if [ -z "$STASH_HOME" ]; then
   export STASH_HOME=/opt/stash-home
 fi

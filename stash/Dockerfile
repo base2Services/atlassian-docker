@@ -16,7 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Stash
 
-RUN apt-get install -q -y curl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y curl sudo
 RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-2.12.1.tar.gz -o /root/stash.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /opt/stash --shell /bin/bash stash
 RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
@@ -26,9 +26,13 @@ RUN chown -R stash:stash /opt/stash
 
 ADD launch.bash /launch
 
+ADD own-volume.sh /usr/local/bin/own-volume
+RUN echo "stash ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
+
 # Launching Stash
 
 WORKDIR /opt/stash
+VOLUME /opt/stash-home
 EXPOSE 7990
 USER stash
 CMD ["/launch"]
