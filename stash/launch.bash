@@ -8,6 +8,14 @@ if [ -z "$STASH_HOME" ]; then
   export STASH_HOME=/opt/stash-home
 fi
 
+if [ "$CONTEXT_PATH" == "ROOT" -o -z "$CONTEXT_PATH" ]; then
+  CONTEXT_PATH=
+else
+  echo "Setting context path to: $CONTEXT_PATH"
+  CONTEXT_PATH="/$CONTEXT_PATH"
+fi
+xmlstarlet ed -u '//Context/@path' -v "$CONTEXT_PATH" conf/server-backup.xml > conf/server.xml
+
 urldecode() {
     local data=${1//+/ }
     printf '%b' "${data//%/\x}"
