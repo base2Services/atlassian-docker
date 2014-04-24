@@ -33,6 +33,6 @@ RUN echo "stash ALL=NOPASSWD: /usr/local/bin/own-volume" >> /etc/sudoers
 
 WORKDIR /opt/stash
 VOLUME /opt/stash-home
-EXPOSE 7990
+EXPOSE 7990 7999
 USER stash
 CMD ["/launch"]
