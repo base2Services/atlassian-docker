@@ -1,23 +1,10 @@
 # Basics
 #
-FROM ubuntu:12.04
+FROM durdn/atlassian-base
 MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
-RUN apt-get update
-RUN apt-get install -q -y git-core
-
-# Install Java 7
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y software-properties-common
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y python-software-properties
-RUN DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
-RUN apt-get update
-RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
 
 # Install Jira
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y curl sudo
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y xmlstarlet
 RUN curl -Lks http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.2.3.tar.gz -o /root/jira.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /opt/jira --shell /bin/bash jira
 RUN tar zxf /root/jira.tar.gz --strip=1 -C /opt/jira

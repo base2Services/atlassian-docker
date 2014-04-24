@@ -8,6 +8,8 @@ fi
 $SUDO docker pull zaiste/postgresql
 $SUDO docker run -d --name postgres -p=5432:5432 zaiste/postgresql
 
+$SUDO docker build -t durdn/atlassian-base base
+
 cd "$(dirname $0)"
 cat initialise_db.sh | $SUDO docker run --rm -i --link postgres:db zaiste/postgresql bash -
 
