@@ -21,6 +21,7 @@ RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian
 RUN mkdir -p /opt/stash
 RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
 RUN mkdir -p /opt/stash-home
+RUN sed -i -e "s/^#!\/bin\/sh/#!\/bin\/bash/" /opt/stash/bin/catalina.sh
 
 # Launching Stash
 
