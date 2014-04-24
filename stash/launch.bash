@@ -2,6 +2,7 @@
 set -o errexit
 
 sudo own-volume
+umask 0027
 
 if [ -z "$STASH_HOME" ]; then
   export STASH_HOME=/opt/stash-home
