@@ -1,6 +1,6 @@
 # Basics
 #
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git-core curl sudo xmlstarlet \
