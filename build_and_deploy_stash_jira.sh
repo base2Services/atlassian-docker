@@ -14,12 +14,14 @@ cd "$(dirname $0)"
 cat initialise_db.sh | $SUDO docker run --rm -i --link postgres:db zaiste/postgresql bash -
 
 $SUDO docker build -t durdn/stash stash
-$SUDO docker tag durdn/stash durdn/stash:2.12.1
+STASH_VERSION="$($SUDO docker run --rm durdn/stash sh -c 'echo $STASH_VERSION')"
+$SUDO docker tag durdn/stash durdn/stash:$STASH_VERSION
 
 $SUDO docker run -d --name stash --link postgres:db -p 7990:7990 -p 7999:7999 durdn/stash
 
 $SUDO docker build -t durdn/jira jira
-$SUDO docker tag durdn/jira durdn/jira:6.2.3
+JIRA_VERSION="$($SUDO docker run --rm durdn/jira sh -c 'echo $JIRA_VERSION')"
+$SUDO docker tag durdn/jira durdn/jira:$JIRA_VERSION
 
 $SUDO docker run -d --name jira --link postgres:db --link stash:stash -p 8080:8080 durdn/jira
 

@@ -5,7 +5,8 @@ MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 
 # Install Stash
 
-RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-2.12.3.tar.gz -o /root/stash.tar.gz
+ENV STASH_VERSION 2.12.3
+RUN curl -Lks http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-${STASH_VERSION}.tar.gz -o /root/stash.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /opt/stash --groups atlassian --shell /bin/bash stash
 RUN tar zxf /root/stash.tar.gz --strip=1 -C /opt/stash
 RUN sed -i -e "s/^#!\/bin\/sh/#!\/bin\/bash/" /opt/stash/bin/catalina.sh
