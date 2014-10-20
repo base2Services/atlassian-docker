@@ -17,6 +17,10 @@ xmlstarlet ed -u '//Context/@path' -v "$CONTEXT_PATH" conf/server-backup.xml > c
 if [ -n "$DATABASE_URL" ]; then
   extract_database_url "$DATABASE_URL" DB /opt/jira/lib
   DB_JDBC_URL="$(xmlstarlet esc "$DB_JDBC_URL")"
+  SCHEMA=''
+  if [ "$DB_TYPE" != "mysql" ]; then
+    SCHEMA='<schema-name>public</schema-name>'
+  fi
 
   cat <<END > /opt/atlassian-home/dbconfig.xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -24,7 +28,7 @@ if [ -n "$DATABASE_URL" ]; then
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
   <database-type>$DB_TYPE</database-type>
-  <schema-name>public</schema-name>
+  $SCHEMA
   <jdbc-datasource>
     <url>$DB_JDBC_URL</url>
     <driver-class>$DB_JDBC_DRIVER</driver-class>
