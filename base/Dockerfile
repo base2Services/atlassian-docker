@@ -10,8 +10,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git-core curl sudo xmls
 
 RUN DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:webupd8team/java -y
 RUN apt-get update
-RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java7-installer -y
+RUN echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java6-installer -y
 
 # Setup volume handling
 RUN /usr/sbin/groupadd atlassian
