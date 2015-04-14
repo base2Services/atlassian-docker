@@ -1,6 +1,6 @@
 # Basics
 #
-FROM durdn/atlassian-base:java6
+FROM base2jenkins/atlassian-base:java6
 MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 
 # Install Jira
