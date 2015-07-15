@@ -45,4 +45,4 @@ if [ -n "$DATABASE_URL" ]; then
 END
 fi
 
-/opt/jira/bin/start-jira.sh -fg
+/opt/jira/bin/startup.sh -fg
