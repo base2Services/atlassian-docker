@@ -54,7 +54,7 @@ if [ -n "$DATABASE_URL" ]; then
 </Server>
 END
   cat <<END > /opt/jira/atlassian-jira/WEB-INF/classes/entityengine.xml
-  <?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE entity-config PUBLIC "-//OFBiz//DTD Entity Engine Config//EN" "http://www.ofbiz.org/dtds/entity-config.dtd">
 <entity-config>
     <resource-loader name="maincp" class="org.ofbiz.core.config.ClasspathLoader"/>
