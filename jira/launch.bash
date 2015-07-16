@@ -43,6 +43,39 @@ if [ -n "$DATABASE_URL" ]; then
   </jdbc-datasource>
 </jira-database-config>
 END
+  cat <<END > /opt/jira/conf/server.xml
+<Server port="8005" shutdown="SHUTDOWN">
+
+  <Service name="Catalina">
+
+    <Connector port="8080"
+      maxHttpHeaderSize="8192" maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+      enableLookups="false" redirectPort="8443" acceptCount="100" 
+      connectionTimeout="20000" disableUploadTimeout="true" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+
+        <Context path="" docBase="\${catalina.home}/atlassian-jira" reloadable="false">
+          <Resource name="jdbc/JiraDS" auth="Container" type="javax.sql.DataSource"
+            username="$DB_USER"
+            password="$DB_PASSWORD"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://localhost/jiradb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
+            [ delete the minEvictableIdleTimeMillis and timeBetweenEvictionRunsMillis params here ]
+            />
+
+          <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+            factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+          <Manager className="org.apache.catalina.session.PersistentManager" saveOnRestart="false"/>
+        </Context>
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+END
+
 fi
 
 export JRE_HOME=/usr/lib/jvm/java-7-oracle/
