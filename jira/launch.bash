@@ -41,7 +41,6 @@ if [ -n "$DATABASE_URL" ]; then
             password="$DB_PASSWORD"
             driverClassName="com.mysql.jdbc.Driver"
             url="jdbc:$DB_JDBC_URL?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
-            [ delete the minEvictableIdleTimeMillis and timeBetweenEvictionRunsMillis params here ]
             />
 
           <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
