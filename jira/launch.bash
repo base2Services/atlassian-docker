@@ -45,4 +45,6 @@ if [ -n "$DATABASE_URL" ]; then
 END
 fi
 
-/opt/jira/bin/startup.sh -fg
+export JRE_HOME=/usr/lib/jvm/java-7-oracle/
+
+/opt/jira/bin/catalina.sh run
