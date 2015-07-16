@@ -22,27 +22,6 @@ if [ -n "$DATABASE_URL" ]; then
     SCHEMA='<schema-name>public</schema-name>'
   fi
 
-  cat <<END > /opt/atlassian-home/dbconfig.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<jira-database-config>
-  <name>defaultDS</name>
-  <delegator-name>default</delegator-name>
-  <database-type>$DB_TYPE</database-type>
-  $SCHEMA
-  <jdbc-datasource>
-    <url>$DB_JDBC_URL</url>
-    <driver-class>$DB_JDBC_DRIVER</driver-class>
-    <username>$DB_USER</username>
-    <password>$DB_PASSWORD</password>
-    <pool-min-size>20</pool-min-size>
-    <pool-max-size>20</pool-max-size>
-    <pool-max-wait>30000</pool-max-wait>
-    <pool-max-idle>20</pool-max-idle>
-    <pool-remove-abandoned>true</pool-remove-abandoned>
-    <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>
-  </jdbc-datasource>
-</jira-database-config>
-END
   cat <<END > /opt/jira/conf/server.xml
 <Server port="8005" shutdown="SHUTDOWN">
 
@@ -61,7 +40,7 @@ END
             username="$DB_USER"
             password="$DB_PASSWORD"
             driverClassName="com.mysql.jdbc.Driver"
-            url="jdbc:mysql://localhost/jiradb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
+            url="jdbc:$DB_JDBC_URL?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
             [ delete the minEvictableIdleTimeMillis and timeBetweenEvictionRunsMillis params here ]
             />
 
@@ -75,7 +54,56 @@ END
   </Service>
 </Server>
 END
+  cat <<END > /opt/jira/atlassian-jira/WEB-INF/classes/entityengine.xml
+  <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE entity-config PUBLIC "-//OFBiz//DTD Entity Engine Config//EN" "http://www.ofbiz.org/dtds/entity-config.dtd">
+<entity-config>
+    <resource-loader name="maincp" class="org.ofbiz.core.config.ClasspathLoader"/>
 
+    <transaction-factory class="org.ofbiz.core.entity.transaction.JNDIFactory">
+      <user-transaction-jndi jndi-server-name="default" jndi-name="java:comp/env/UserTransaction"/>
+      <transaction-manager-jndi jndi-server-name="default" jndi-name="java:comp/env/UserTransaction"/>
+    </transaction-factory>
+
+    <delegator name="default" entity-model-reader="main" entity-group-reader="main">
+        <group-map group-name="default" datasource-name="defaultDS"/>
+    </delegator>
+
+    <entity-model-reader name="main">
+        <resource loader="maincp" location="entitydefs/entitymodel.xml"/>
+    </entity-model-reader>
+
+    <entity-group-reader name="main" loader="maincp" location="entitydefs/entitygroup.xml"/>
+
+    <field-type name="cloudscape" loader="maincp" location="entitydefs/fieldtype-cloudscape.xml"/>
+    <field-type name="firebird" loader="maincp" location="entitydefs/fieldtype-firebird.xml"/>
+    <field-type name="hsql" loader="maincp" location="entitydefs/fieldtype-hsql18.xml"/>
+    <field-type name="mckoidb" loader="maincp" location="entitydefs/fieldtype-mckoidb.xml"/>
+    <field-type name="mysql" loader="maincp" location="entitydefs/fieldtype-mysql.xml"/>
+    <field-type name="mssql" loader="maincp" location="entitydefs/fieldtype-mssql.xml"/>
+    <field-type name="oracle" loader="maincp" location="entitydefs/fieldtype-oracle.xml"/>
+    <field-type name="oracle10g" loader="maincp" location="entitydefs/fieldtype-oracle10g.xml"/>
+    <field-type name="postgres" loader="maincp" location="entitydefs/fieldtype-postgres.xml"/>
+    <field-type name="postgres72" loader="maincp" location="entitydefs/fieldtype-postgres72.xml"/> <!-- use for postgres 7.2 and above -->
+    <field-type name="sapdb" loader="maincp" location="entitydefs/fieldtype-sapdb.xml"/>
+    <field-type name="sybase" loader="maincp" location="entitydefs/fieldtype-sybase.xml"/>
+    <field-type name="db2" loader="maincp" location="entitydefs/fieldtype-db2.xml"/>
+    <field-type name="frontbase" loader="maincp" location="entitydefs/fieldtype-frontbase.xml"/>
+
+    <datasource name="defaultDS" field-type-name="$$DB_TYPE"
+      helper-class="org.ofbiz.core.entity.GenericHelperDAO"
+      check-on-start="true"
+      use-foreign-keys="false"
+      use-foreign-key-indices="false"
+      check-fks-on-start="false"
+      check-fk-indices-on-start="false"
+      add-missing-on-start="true"
+      check-indices-on-start="true">
+        <jndi-jdbc jndi-server-name="default" jndi-name="java:comp/env/jdbc/JiraDS"/>
+    </datasource>
+</entity-config>
+
+END
 fi
 
 export JRE_HOME=/usr/lib/jvm/java-7-oracle/
