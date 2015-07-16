@@ -90,7 +90,7 @@ END
     <field-type name="db2" loader="maincp" location="entitydefs/fieldtype-db2.xml"/>
     <field-type name="frontbase" loader="maincp" location="entitydefs/fieldtype-frontbase.xml"/>
 
-    <datasource name="defaultDS" field-type-name="$$DB_TYPE"
+    <datasource name="defaultDS" field-type-name="$DB_TYPE"
       helper-class="org.ofbiz.core.entity.GenericHelperDAO"
       check-on-start="true"
       use-foreign-keys="false"
