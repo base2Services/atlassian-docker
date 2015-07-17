@@ -5,6 +5,10 @@ MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 
 # Install Jira
 
+RUN apt-get update
+RUN apt-get remove oracle-java7-installer
+RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java6-installer -y
+
 ENV JIRA_VERSION 3.12.3
 RUN curl -Lks https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-standard-${JIRA_VERSION}-standalone.tar.gz -o /root/jira.tar.gz
 RUN /usr/sbin/useradd --create-home --home-dir /opt/jira --groups atlassian --shell /bin/bash jira
