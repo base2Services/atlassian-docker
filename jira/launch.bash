@@ -15,7 +15,7 @@ fi
 xmlstarlet ed -u '//Context/@path' -v "$CONTEXT_PATH" conf/server-backup.xml > conf/server.xml
 
 if [ -n "$DATABASE_URL" ]; then
-  extract_database_url "$DATABASE_URL" DB /opt/jira/lib
+  extract_database_url "$DATABASE_URL" DB /opt/jira/common/lib
   DB_JDBC_URL="$(xmlstarlet esc "$DB_JDBC_URL")"
   SCHEMA=''
   if [ "$DB_TYPE" != "mysql" ]; then
