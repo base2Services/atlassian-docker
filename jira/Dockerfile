@@ -6,7 +6,7 @@ MAINTAINER Nicola Paolucci <npaolucci@atlassian.com>
 # Install Jira
 
 RUN apt-get update
-RUN apt-get remove oracle-java7-installer
+RUN apt-get remove oracle-java7-installer -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install oracle-java6-installer -y
 
 ENV JIRA_VERSION 3.12.3
