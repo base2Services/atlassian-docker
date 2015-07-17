@@ -105,6 +105,6 @@ END
 END
 fi
 
-export JRE_HOME=/usr/lib/jvm/java-7-oracle/
+export JRE_HOME=/usr/lib/jvm/java-6-oracle/
 
 /opt/jira/bin/catalina.sh run
