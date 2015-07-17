@@ -46,7 +46,7 @@ parse_url() {
 }
 
 download_mysql_driver() {
-  local driver="mysql-connector-java-5.1.30"
+  local driver="mysql-connector-java-3.1.12"
   if [ ! -f "$1/$driver-bin.jar" ]; then
     echo "Downloading MySQL JDBC Driver..."
     curl -L http://dev.mysql.com/get/Downloads/Connector-J/$driver.tar.gz | tar zxv -C /tmp
