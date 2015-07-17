@@ -40,7 +40,7 @@ if [ -n "$DATABASE_URL" ]; then
             username="$DB_USER"
             password="$DB_PASSWORD"
             driverClassName="com.mysql.jdbc.Driver"
-            url="jdbc:$DB_JDBC_URL?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
+            url="$DB_JDBC_URL?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8"
             />
 
           <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
